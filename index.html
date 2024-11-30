@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Do You Love Me?</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #ff9a9e, #fad0c4);
+            color: #fff;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            margin: 5% auto;
+            width: 90%;
+            max-width: 600px;
+            padding: 20px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .button-container {
+            margin: 20px 0;
+        }
+
+        .button {
+            font-size: 1.2rem;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .yes {
+            background-color: #ff6f91;
+            color: white;
+        }
+
+        .no {
+            background-color: #ffa6c1;
+            color: white;
+        }
+
+        .button:hover {
+            transform: scale(1.1);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .love-image {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 300px;
+            border-radius: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .playlist {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .playlist h3 {
+            text-align: center;
+        }
+
+        .song {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #ff9a9e;
+            border-radius: 20px;
+            padding: 8px 15px;
+            margin: 10px 0;
+            width: 100%;
+            text-align: left;
+            font-size: 0.9rem;
+            color: #555;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .song:hover {
+            background: #ffe6f0;
+            transform: scale(1.05);
+        }
+
+        .song .icon {
+            font-size: 1rem;
+            color: #ff6f91;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="title">Do You Love Me? 💖</h1>
+        <div class="button-container">
+            <button id="yes-button" class="button yes">Yes</button>
+            <button id="no-button" class="button no">No</button>
+        </div>
+        <div id="message" class="hidden">
+            <h2>I Love You Too! 💕</h2>
+            <img src="https://img.freepik.com/free-photo/cute-teddy-bear-ai-generated-image_268835-5042.jpg" alt="Love"
+                class="love-image">
+        </div>
+        <div class="playlist">
+            <h3>Song For You 🎵</h3>
+            <ul>
+                <li>
+                    <button class="song" data-audio="./128-Apna Bana Le - Bhediya 128 Kbps.mp3">
+                        <span>Apna Bana Le</span>
+                        <span class="icon">▶</span>
+                    </button>
+                </li>
+                <li>
+                    <button class="song" data-audio="./128-Hasi Ban Gaye - Kunaal Vermaa 128 Kbps.mp3">
+                        <span>Hasi Ban Gayi</span>
+                        <span class="icon">▶</span>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const noButton = document.getElementById('no-button');
+        const yesButton = document.getElementById('yes-button');
+        const message = document.getElementById('message');
+        let audio = null;
+        let currentButton = null;
+
+        // Make "No" button teleport
+        noButton.addEventListener('mouseover', () => {
+            const x = Math.random() * (window.innerWidth - 100);
+            const y = Math.random() * (window.innerHeight - 50);
+            noButton.style.position = 'absolute';
+            noButton.style.left = `${x}px`;
+            noButton.style.top = `${y}px`;
+        });
+
+        // Show message on "Yes" click
+        yesButton.addEventListener('click', () => {
+            message.classList.remove('hidden');
+            // Hide both buttons
+            yesButton.style.display = 'none';
+            noButton.style.display = 'none';
+        });
+
+        // Handle song buttons
+        document.querySelectorAll('.song').forEach(button => {
+            const icon = button.querySelector('.icon');
+            button.addEventListener('click', () => {
+                if (audio && currentButton === button) {
+                    // Pause if the same button is clicked again
+                    audio.pause();
+                    icon.textContent = '▶';
+                    audio = null;
+                    currentButton = null;
+                } else {
+                    // Stop any playing audio
+                    if (audio) {
+                        const previousIcon = currentButton.querySelector('.icon');
+                        previousIcon.textContent = '▶';
+                        audio.pause();
+                    }
+                    // Play new audio
+                    audio = new Audio(button.dataset.audio);
+                    audio.play();
+                    icon.textContent = '⏸';
+                    currentButton = button;
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
